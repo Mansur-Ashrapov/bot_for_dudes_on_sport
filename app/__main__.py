@@ -24,6 +24,12 @@ from app.jobs import (
 logging.basicConfig()
 logging.getLogger('telethon').setLevel(logging.DEBUG)
 
+# вот как должен выглядеть массив проксей без баззы
+# proxys = [
+#   (socks.SOCKS5, addr, port, True, login, password),
+#   (socks.SOCKS5, addr, port, True, login, password),
+#   (socks.SOCKS5, addr, port, True, login, password)
+# ]
 
 # Один аккаунт становится базовым, Arica ты уже сделал админом, так что он и базовый
 base_client = None
