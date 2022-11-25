@@ -1,0 +1,6 @@
+.session
+env
+__pycache__
+configi.ini
+.session-journal
+.json

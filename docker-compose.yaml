@@ -1,0 +1,33 @@
+version: '3.7'
+
+services:
+  postgres_db_bot:
+    image: postgres:14
+    restart: "always"
+    volumes:
+      - postgres_data_bot:/var/lib/postgresql/data/
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_USER=user_db
+      - POSTGRES_PASSWORD=pswd_db
+      - POSTGRES_DB=dev_db
+      
+  # bot_dudes:
+  #   build: ./app
+  #   command: python -m app
+  #   restart: "always"
+  #   volumes:
+  #     - bot_dudes:/var/lib/bot_dudes/data/
+  #   environment:
+  #     - DATABASE_URL=postgresql://user_db:pswd_db@postgres_db_bot:5432/dev_db
+  #     - API_ID=
+  #     - API_HASH=
+  #     - USERNAME=
+  #   depends_on:
+  #     - postgres_db_bot
+
+  
+volumes:
+  postgres_data_bot:
+  # bot_dudes:
