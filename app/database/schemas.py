@@ -48,3 +48,11 @@ class SentMessagesDataclassIn:
 @dataclass
 class SentMessagesDataclassOut(SentMessagesDataclassIn):
     sent_date: datetime.datetime
+
+
+@dataclass
+class TelegramClientDataclass:
+    username: str
+    api_hash: str
+    api_id: str
+    proxy_id: int

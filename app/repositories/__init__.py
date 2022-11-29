@@ -4,6 +4,7 @@ from app.repositories.history_rep import HistoryRepository
 from app.repositories.post_rep import PostsRepository
 from app.repositories.sent_messages_rep import SentMessagesRepository
 from app.repositories.proxys_rep import ProxysRepositrory
+from app.repositories.telegram_client_rep import TelegramClientRepository
 
 
-__all__ = ('UserRepository', 'NewUserRepository', 'HistoryRepository', 'PostsRepository', 'SentMessagesRepository', 'ProxysRepositrory')
+__all__ = ('UserRepository', 'NewUserRepository', 'HistoryRepository', 'PostsRepository', 'SentMessagesRepository', 'ProxysRepositrory', 'TelegramClientRepository')

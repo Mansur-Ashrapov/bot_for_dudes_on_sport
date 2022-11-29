@@ -1,4 +1,4 @@
-from sqlalchemy import BigInteger, Column, Integer, String, Table, DateTime, Boolean
+from sqlalchemy import BigInteger, Column, Integer, String, Table, DateTime, ForeignKey
 from sqlalchemy.sql import func
 
 from app.database.db import metadata
@@ -49,6 +49,18 @@ SentMessages = Table(
     Column('participant_id', BigInteger),
     Column('sent_date', DateTime, default=func.now())
 )
+
+
+TelegramClient = Table(
+    'telegram_clients',
+    metadata,
+    Column('id', Integer, primary_key=True, index=True),
+    Column('proxy_id', Integer, ForeignKey('proxys.id')),
+    Column('username', String, unique=True),
+    Column('api_hash', String),
+    Column('api_id', String)
+)
+
 
 Proxy = Table(
     'proxys',

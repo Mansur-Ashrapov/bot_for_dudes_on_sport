@@ -1,7 +1,7 @@
 import random
 import time
 
-from telethon.sync import TelegramClient
+from telethon.sync import TelegramClient, errors
 
 from app.repositories import (
     UserRepository,
@@ -20,24 +20,35 @@ class InvitesSendler:
 
 
     async def send_invites(self, client: TelegramClient, client_phone: str, count: int, messages: list):
-        new_users = await self._get_not_used_users()
+        await client.connect()
 
-        for user in new_users:
-            if count == 0:
-                break
-            mess = messages[random.randint(0, len(messages)-1)]
+        channel_urls = ['\n@on_sport_dudes', '\nhttps://t.me/on_sport_dudes']
+        hello_messages = ['Привет!', 'Доброго времени суток!', 'Приветствую!', 'Йоу!', 'Здарова!', 'Хай)', 'Привет)', 'Здарова)']
 
-            # По другому нельзя сделать, необходимо "найти" человека в коментариях и тогда можно будет отправить ему сообщение
-            async for message in client.iter_messages(user.channel_from, reply_to=user.post_id):
-                if message.from_id.user_id == user.user_id:
-                    u = await client.get_entity(user.user_id)
-                    await client.send_message(u, mess)
-                    await self.sent_messages_repo.add(SentMessagesDataclassIn(
-                        from_client=client_phone,
-                        participant_id=user.user_id
-                    ))
-                    count -= 1
-                    time.sleep(random.randint(30, 60))
+        try:
+            new_users = await self._get_not_used_users()
+            for user in new_users:
+                if count == 0:
+                    break
+                mess = random.choice(hello_messages) + random.choice(messages) + random.choice(channel_urls)
+
+                try:
+                    # По другому нельзя сделать, необходимо "найти" человека в коментариях и тогда можно будет отправить ему сообщение
+                    async for message in client.iter_messages(user.channel_from, reply_to=user.post_id):
+                        if message.from_id.user_id == user.user_id:
+                            u = await client.get_entity(user.user_id)
+                            await client.send_message(u, mess)
+                            await self.sent_messages_repo.add(SentMessagesDataclassIn(
+                                from_client=client_phone,
+                                participant_id=user.user_id
+                            ))
+                            count -= 1
+                            time.sleep(random.randint(30, 60))
+                            break
+                except errors.PeerFloodError:
+                    break
+        finally:
+            await client.disconnect()
 
 
     async def _get_not_used_users(self):

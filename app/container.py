@@ -10,11 +10,22 @@ from app.repositories import (
     HistoryRepository,
     PostsRepository,
     SentMessagesRepository,
-    ProxysRepositrory
+    ProxysRepositrory,
+    TelegramClientRepository
 )
 from app.login_collector import LoginCollector
 from app.database.db import CustomDatabase
 from app.invites_sendler import InvitesSendler
+
+
+proxy = {
+        'proxy_type': 'socks5', # (mandatory) protocol to use (see above)
+        'addr': config.ADDR,      # (mandatory) proxy IP address
+        'port': config.PORT,           # (mandatory) proxy port number
+        'username': config.LOGIN,      # (optional) username if the proxy requires auth
+        'password': config.PASSWORD,      # (optional) password if the proxy requires auth
+        'rdns': True            # (optional) whether to use remote or local resolve, default remote
+    }
 
 
 class AppContainer(containers.DeclarativeContainer):
@@ -23,6 +34,23 @@ class AppContainer(containers.DeclarativeContainer):
         url=config.DATABASE_URL
     )
 
+    session = providers.Singleton(
+        SQLiteSession,
+        session_id=config.USERNAME
+    )
+
+    client = providers.Singleton(
+        TelegramClient,
+        session=session,
+        api_id=config.API_ID,
+        api_hash=config.API_HASH,
+        proxy=proxy
+    )
+
+    tg_clients_rep = providers.Factory(
+        TelegramClientRepository,
+        db=db
+    )
     users_repo = providers.Factory(
         UserRepository,
         db=db
@@ -47,13 +75,15 @@ class AppContainer(containers.DeclarativeContainer):
         ProxysRepositrory,
         db=db
     )
+    
 
     login_collector = providers.Factory(
         LoginCollector,
         new_users_repo=new_users_repo,
         posts_repo=posts_repo,
         history_repo=history_repo,
-        users_repo=users_repo
+        users_repo=users_repo,
+        client=client
         # channels_repo=channels_repo
     )
 
