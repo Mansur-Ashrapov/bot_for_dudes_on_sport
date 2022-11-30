@@ -5,10 +5,14 @@ from bs4 import BeautifulSoup as bs
 def get_free_proxies():
     url = "https://free-proxy-list.net/"
 
-    try:
-        req = requests.get(url)
-    finally:
-        content = req.content
+    req = None
+    content = None
+    while req == None and content == None:
+        try:
+            req = requests.get(url)
+        finally:
+            content = req.content
+            
     soup = bs(content, "html.parser")
     proxies = []
     for row in soup.find("div", attrs={"class": "fpl-list"}).find_all("tr"):

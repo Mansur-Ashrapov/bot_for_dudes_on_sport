@@ -50,9 +50,11 @@ if __name__ == '__main__':
     loop = asyncio.new_event_loop()
     loop.run_until_complete(start_up())
 
-    # schedule.every(1).seconds.do(job, func=send_invites_to_users, loop=loop, on_startup=None)
-    schedule.every().day.at('00:00').do(job, func=collect_users, loop=loop, on_startup=None)
-    schedule.every(4).days.at('03:00').do(job, func=send_invites_to_users, loop=loop, on_startup=None)
+    schedule.every(5).seconds.do(job, func=send_invites_to_users, loop=loop, on_startup=None)
+    # schedule.every(180).seconds.do(job, func=send_invites_to_users, loop=loop, on_startup=None)
+
+    # schedule.every().day.at('00:00').do(job, func=collect_users, loop=loop, on_startup=None)
+    # schedule.every(4).days.at('03:00').do(job, func=send_invites_to_users, loop=loop, on_startup=None)
 
     while True:
         schedule.run_pending()

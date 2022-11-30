@@ -25,10 +25,9 @@ async def send_invites_to_users(invates_sendler: InvitesSendler = Provide[AppCon
     
     # Сообщения, к ним атоматом добавляется url группы на новой строке
     messages = [
-        '\nПодписывайтесь на наш канал',
         '\nМы ведем спортивный канал, заходи к нам',
-        '\nПриглашаем посмотреть за нашим прогрессом',
-        '\nУ нас можно увдиеть за спортивным прогрессом сильных людей',
+        '\nПриглашаем посмотреть за нашим спортивным прогрессом',
+        '\nУ нас можно наблюдать за спортивным прогрессом сильных людей',
         '\nПриглашаем к нам на канал спортивного контента',
         '\nЗаходи на наш канал спортивного движа)',
     ]
@@ -39,5 +38,5 @@ async def send_invites_to_users(invates_sendler: InvitesSendler = Provide[AppCon
         session = SQLiteSession(client_data.username)
         proxy = get_free_proxies()
         client = TelegramClient(session, client_data.api_id, client_data.api_hash, proxy=proxy)
-        await invates_sendler.send_invites(client=client, client_phone=client_data.username, count=8, messages=messages)
+        await invates_sendler.send_invites(client=client, client_phone=client_data.username, count=5, messages=messages)
     

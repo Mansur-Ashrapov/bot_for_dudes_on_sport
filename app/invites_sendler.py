@@ -20,16 +20,20 @@ class InvitesSendler:
 
 
     async def send_invites(self, client: TelegramClient, client_phone: str, count: int, messages: list):
-        await client.connect()
-
         hello_messages = ['Привет!', 'Доброго времени суток!', 'Приветствую!', 'Йоу!', 'Здарова!', 'Хай)', 'Привет)', 'Здарова)']
 
+        bio = ['\nСслыка на канал у меня в профиле',
+              '\nНа канал можно зайти, перейдя по ссылке в профиле',
+              '\nКанал можно найти у меня в профиле']
+
         try:
+            await client.connect()
+        finally:
             new_users = await self._get_not_used_users()
             for user in new_users:
                 if count == 0:
                     break
-                mess = random.choice(hello_messages) + random.choice(messages)
+                mess = random.choice(hello_messages) + random.choice(messages) + random.choice(bio)
 
                 try:
                     # По другому нельзя сделать, необходимо "найти" человека в коментариях и тогда можно будет отправить ему сообщение
@@ -38,16 +42,15 @@ class InvitesSendler:
                             u = await client.get_entity(user.user_id)
                             await client.send_message(u, mess)
                             await self.sent_messages_repo.add(SentMessagesDataclassIn(
-                                from_client=client_phone,
+                                from_client=int(client_phone),
                                 participant_id=user.user_id
                             ))
                             count -= 1
-                            time.sleep(random.randint(180, 240))
+                            time.sleep(random.randint(240, 300))
                             break
                 except errors.PeerFloodError:
                     break
-        finally:
-            await client.disconnect()
+        await client.disconnect()
 
 
     async def _get_not_used_users(self):
