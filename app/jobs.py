@@ -9,6 +9,7 @@ from app.repositories import (
     TelegramClientRepository,
     ProxysRepositrory
 )
+from app.get_proxies import get_free_proxies
 
 
 @inject
@@ -20,7 +21,7 @@ async def collect_users(login_collector: LoginCollector = Provide[AppContainer.l
 
 
 @inject
-async def send_invites_to_users(invates_sendler: InvitesSendler = Provide[AppContainer.invites_sendler], tg_clients_rep: TelegramClientRepository = Provide[AppContainer.tg_clients_rep], proxys_rep: ProxysRepositrory = Provide[AppContainer.proxys_repo]):
+async def send_invites_to_users(invates_sendler: InvitesSendler = Provide[AppContainer.invites_sendler], tg_clients_rep: TelegramClientRepository = Provide[AppContainer.tg_clients_rep]):
     
     # Сообщения, к ним атоматом добавляется url группы на новой строке
     messages = [
@@ -36,7 +37,7 @@ async def send_invites_to_users(invates_sendler: InvitesSendler = Provide[AppCon
     
     for client_data in clients:
         session = SQLiteSession(client_data.username)
-        proxy = await proxys_rep.get_by_id(client_data.proxy_id)
+        proxy = get_free_proxies()
         client = TelegramClient(session, client_data.api_id, client_data.api_hash, proxy=proxy)
         await invates_sendler.send_invites(client=client, client_phone=client_data.username, count=8, messages=messages)
     

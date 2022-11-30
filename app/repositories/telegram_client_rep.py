@@ -17,7 +17,7 @@ class TelegramClientRepository:
                 username=username,
                 api_hash=client_db.api_hash,
                 api_id=client_db.api_id,
-                proxy_id=client_db.proxy_id
+                # proxy_id=client_db.proxy_id
             )
         return result
 
@@ -33,7 +33,7 @@ class TelegramClientRepository:
                     username=client.username,
                     api_hash=client.api_hash,
                     api_id=client.api_id,
-                    proxy_id=client.proxy_id
+                    # proxy_id=client.proxy_id
                 ))
             return result
         return None

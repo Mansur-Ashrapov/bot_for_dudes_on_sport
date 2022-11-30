@@ -22,7 +22,6 @@ class InvitesSendler:
     async def send_invites(self, client: TelegramClient, client_phone: str, count: int, messages: list):
         await client.connect()
 
-        channel_urls = ['\n@on_sport_dudes', '\nhttps://t.me/on_sport_dudes']
         hello_messages = ['Привет!', 'Доброго времени суток!', 'Приветствую!', 'Йоу!', 'Здарова!', 'Хай)', 'Привет)', 'Здарова)']
 
         try:
@@ -30,7 +29,7 @@ class InvitesSendler:
             for user in new_users:
                 if count == 0:
                     break
-                mess = random.choice(hello_messages) + random.choice(messages) + random.choice(channel_urls)
+                mess = random.choice(hello_messages) + random.choice(messages)
 
                 try:
                     # По другому нельзя сделать, необходимо "найти" человека в коментариях и тогда можно будет отправить ему сообщение
@@ -43,7 +42,7 @@ class InvitesSendler:
                                 participant_id=user.user_id
                             ))
                             count -= 1
-                            time.sleep(random.randint(30, 60))
+                            time.sleep(random.randint(180, 240))
                             break
                 except errors.PeerFloodError:
                     break

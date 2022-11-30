@@ -55,4 +55,4 @@ class TelegramClientDataclass:
     username: str
     api_hash: str
     api_id: str
-    proxy_id: int
+    # proxy_id: int

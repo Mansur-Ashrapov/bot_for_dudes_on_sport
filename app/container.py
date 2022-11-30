@@ -16,16 +16,10 @@ from app.repositories import (
 from app.login_collector import LoginCollector
 from app.database.db import CustomDatabase
 from app.invites_sendler import InvitesSendler
+from app.get_proxies import get_free_proxies
 
 
-proxy = {
-        'proxy_type': 'socks5', # (mandatory) protocol to use (see above)
-        'addr': config.ADDR,      # (mandatory) proxy IP address
-        'port': config.PORT,           # (mandatory) proxy port number
-        'username': config.LOGIN,      # (optional) username if the proxy requires auth
-        'password': config.PASSWORD,      # (optional) password if the proxy requires auth
-        'rdns': True            # (optional) whether to use remote or local resolve, default remote
-    }
+proxy = get_free_proxies()
 
 
 class AppContainer(containers.DeclarativeContainer):
